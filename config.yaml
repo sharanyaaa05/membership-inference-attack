@@ -1,0 +1,66 @@
+#configuration
+
+dataset:
+  name: zenodo
+  type: url_lexical_content
+
+  processed_dir: data/processed
+  attack_dir: data/attack
+
+  target_train_file: target_train.csv
+  target_test_file: target_test.csv
+  shadow_pool_file: shadow_train.csv
+
+#target model (victim)
+
+target_model:
+  type: svm
+  kernel: rbf
+  C: 10.0
+  gamma: scale
+  probability: true          
+  random_state: 42
+
+  model_path: models/target_model.pkl
+
+#shadow models
+
+shadow_models:
+  num_models: 20
+  train_ratio: 0.7
+  random_state: 42
+
+  type: svm
+  kernel: rbf
+  C: 10.0
+  gamma: scale
+  probability: true
+
+  save_dir: models/shadow_models
+
+#attack dataset
+
+attack_dataset:
+  features:
+    - max_prob
+    - entropy
+    - loss
+    - correct
+
+  label: is_member
+  output_file: data/attack/attack_dataset.csv
+
+#attack model
+
+attack_model:
+  type: logistic_regression
+  test_size: 0.3
+  random_state: 42
+
+  model_path: models/attack_model.pkl
+
+#evaluation
+
+evaluation:
+  primary_metric: roc_auc
+  plot_roc: true
